@@ -1,8 +1,6 @@
 # C nyelv
 
-## Leírás
-
-C általános definíciók és leírások
+## C általános definíciók és leírások
 
 ### Globális memóriaterület
 
