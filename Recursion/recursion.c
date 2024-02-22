@@ -22,23 +22,29 @@ int fakt(int n) {
 }
 
 /*
-Fibonacci-sorozat lépések:
-1. fib(5) hívás: fib(4) és fib(3) adja vissza az eredményét
-2. fib(4) hívás: fib(3) és fib(2) adja vissza az eredményét
-3. fib(3) hívás: fib(2) és fib(1) adja vissza az eredményét
-4. fib(2) hívás: fib(1) és fib(0) adja vissza az eredményét
-5. Rendben ezeket már tudjuk: fib(1) = 1 és fib(0) = 0, szóval fib(2) = 1 + 0 = 1
-6. Akkor fib(3)-at is tudjuk: fib(2) = 1 és fib(1) = 1, szóval fib(3) = 1 + 1 = 2
-7. Akkor fib(4)-et is tudjuk: fib(3) = 2 és fib(2) = 1, szóval fib(3) = 2 + 1 = 3
-8. Akkor végül fib(5)-öt is tudjuk: fib(4) = 3 és fib(3) = 2, szóval fib(5) = 3 + 2 = 5
-9. Visszaadjuk az 5-öt.
+// FIB nagy betűvel: már ki van számolva
+fib(5)
+	fib(4) + fib(3)
+		fib(3) + fib(2) + fib(3)
+			fib(2) + fib(1) + fib(2) + fib(3)
+				fib(1) + fib(0) + fib(1) + fib(2) + fib(3)
+				    FIB(1) + FIB(0) + FIB(1) + fib(1) + fib(0) + fib(3)
+				        FIB(1) + FIB(0) + FIB(1) + FIB(1) + FIB(0) + fib(2) + fib(1)
+				            FIB(1) + FIB(0) + FIB(1) + FIB(1) + FIB(0) + fib(1) + fib(0) + fib(1)
+				                FIB(1) + FIB(0) + FIB(1) + FIB(1) + FIB(0) + FIB(1) + FIB(0) + FIB(1)
+									1 + 0 + 1 + 1 + 0 + 1 + 0 + 1 = 5
+				
+				
+
+Lefutási sorrend:	
+n:5 n:4 n:3 n:2 n:1 n:0 n:1 n:2 n:1 n:0 n:3 n:2 n:1 n:0 n:1 
 
 fib(5) = fib(4) + fib(3) = 5
 fib(4) = fib(3) + fib(2) = 3
 fib(3) = fib(2) + fib(1) = 2
 fib(2) = fib(1) + fib(0) = 1
 fib(1) = 1
-fib(0) = 
+fib(0) = 0
 */
 int fibonacci(int n){
     if (n < 2)
