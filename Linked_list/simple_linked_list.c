@@ -12,13 +12,15 @@ ListaElem *letrehoz(void){
                      
     ListaElem *lista = NULL;
     
-    for (int i = 0; szamok[i] != -1; i++){
+    int i = 0;
+    do {
         ListaElem *u;
         u = (ListaElem*) malloc(sizeof(ListaElem));
         u->adat = szamok[i];
         u->kov = lista;
         lista = u;
-    }
+        i++;
+    } while(szamok[i] != -1);
     
     return lista;
 }
@@ -36,11 +38,11 @@ int getLength(ListaElem *lista){
 
 void freeList(ListaElem *lista){
     ListaElem *mozgo = lista;
-    while (mozgo != NULL){
+    do {
         ListaElem *tmp = mozgo->kov;
         free(mozgo);
         mozgo = tmp;
-    }
+    } while (mozgo != NULL);
 }
 
 ListaElem *lista_elejere_beszur(ListaElem *lista, int szam){
