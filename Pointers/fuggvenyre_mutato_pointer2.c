@@ -54,7 +54,15 @@ int main(void) {
         scanf("%d", &param2);
         MatFvPtr fuggveny = menupontok[szam-1].f;
         
-        printf("A kiszamolt ertek (%c%s muveletet) hasznalva: %d", tolower(*(menupontok[szam-1].nev)), menupontok[szam-1].nev+1, fuggveny(param1, param2));
+        char lower[strlen(menupontok[szam-1].nev) + 1];
+        int i = 0;
+        while(menupontok[szam-1].nev[i]){
+            lower[i] = tolower(*(menupontok[szam-1].nev+i));
+            i++;
+        }
+        lower[i] = '\0';
+        
+        printf("A kiszamolt ertek (%s muveletet) hasznalva: %d", lower, fuggveny(param1, param2));
     }
     
     return 0;
