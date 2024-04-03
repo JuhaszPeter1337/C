@@ -5,6 +5,12 @@
 
 #define LINE_LENGTH 100
 
+// TODO Fuggvenypointer ahol lehet
+// Ascending order
+// Menu
+// Refactor
+// Split into files
+
 typedef struct Event{
     char *name;
     char *time;
@@ -134,17 +140,26 @@ Event *delete_event_by_name(Event *list, char *name){
 
 void modify_event_by_name(Event *list, char *original, char *changed){
     Event *item = search_by_name(list, original);
-    item->name = changed;
+    if (item == NULL)
+        printf("The item does not exist!\n");
+    else
+        item->name = changed;
 }
 
 void modify_event_by_date(Event *list, char *original, char *changed){
     Event *item = search_by_name(list, original);
-    item->time = changed;
+    if (item == NULL)
+        printf("The item does not exist!\n");
+    else
+        item->time = changed;
 }
 
 void modify_event_by_location(Event *list, char *original, char *changed){
     Event *item = search_by_name(list, original);
-    item->location = changed;
+    if (item == NULL)
+        printf("The item does not exist!\n");
+    else
+        item->location = changed;
 }
 
 void print_events(Event *list){
