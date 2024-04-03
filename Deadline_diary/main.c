@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #define LINE_LENGTH 100
 
 typedef struct Event{
     char *name;
     char *time;
-    char *place;
+    char *location;
     char *description;
     struct Event *next;
 } Event;
@@ -44,8 +45,8 @@ Event *create_list(char *filename, Event *list){
             splitted_line = strtok(NULL, "|");
 
             length = get_line_length(splitted_line);
-            event->place = (char*) malloc(sizeof(char) * (length + 1));
-            strcpy(event->place, splitted_line);
+            event->location = (char*) malloc(sizeof(char) * (length + 1));
+            strcpy(event->location, splitted_line);
 
             splitted_line = strtok(NULL, "|");
 
@@ -63,7 +64,7 @@ Event *create_list(char *filename, Event *list){
     return start;
 }
 
-Event *add_event(Event *list, char *name, char *time, char *place, char *description){
+Event *add_event(Event *list, char *name, char *time, char *location, char *description){
     Event *new_event = (Event*) malloc(sizeof(Event));
 
     new_event->name = (char*) malloc(sizeof(char) * (strlen(name) + 1));
@@ -72,8 +73,8 @@ Event *add_event(Event *list, char *name, char *time, char *place, char *descrip
     new_event->time = (char*) malloc(sizeof(char) * (strlen(time) + 1));
     strcpy(new_event->time, time);
 
-    new_event->place = (char*) malloc(sizeof(char) * (strlen(place) + 1));
-    strcpy(new_event->place, place);
+    new_event->location = (char*) malloc(sizeof(char) * (strlen(location) + 1));
+    strcpy(new_event->location, location);
 
     new_event->description = (char*) malloc(sizeof(char) * (strlen(description) + 1));
     strcpy(new_event->description, description);
@@ -86,6 +87,22 @@ Event *add_event(Event *list, char *name, char *time, char *place, char *descrip
 Event *search_by_name(Event *list, char *name){
     for (Event *move = list; move != NULL; move = move->next){
         if (strcmp(move->name, name) == 0)
+            return move;
+    }
+    return NULL;
+}
+
+Event *search_by_date(Event *list, char *date){
+    for (Event *move = list; move != NULL; move = move->next){
+        if (strcmp(move->time, date) == 0)
+            return move;
+    }
+    return NULL;
+}
+
+Event *search_by_location(Event *list, char *location){
+    for (Event *move = list; move != NULL; move = move->next){
+        if (strcmp(move->location, location) == 0)
             return move;
     }
     return NULL;
@@ -115,9 +132,24 @@ Event *delete_event_by_name(Event *list, char *name){
     return list;
 }
 
+void modify_event_by_name(Event *list, char *original, char *changed){
+    Event *item = search_by_name(list, original);
+    item->name = changed;
+}
+
+void modify_event_by_date(Event *list, char *original, char *changed){
+    Event *item = search_by_name(list, original);
+    item->time = changed;
+}
+
+void modify_event_by_location(Event *list, char *original, char *changed){
+    Event *item = search_by_name(list, original);
+    item->location = changed;
+}
+
 void print_events(Event *list){
     for (Event *move = list; move != NULL; move = move->next){
-        printf("Event name: %s\nEvent time: %s\nEvent place: %s\nEvent description: %s\n", move->name, move->time, move->place, move->description);
+        printf("Event name: %s\nEvent time: %s\nEvent location: %s\nEvent description: %s\n", move->name, move->time, move->location, move->description);
         printf("\n");
     }
 }
@@ -130,7 +162,8 @@ void print_list_by_year(Event *list, char *year){
         strncpy(substr, move->time, 4);
         substr[4] = '\0';
         if (strcmp(substr, year) == 0){
-            printf("Event name: %s\nEvent time: %s\nEvent place: %s\nEvent description: %s\n", move->name, move->time, move->place, move->description);
+            //TODO ascending order
+            printf("Event name: %s\nEvent time: %s\nEvent location: %s\nEvent description: %s\n", move->name, move->time, move->location, move->description);
             printf("\n");
         }
     }
@@ -144,7 +177,7 @@ void print_list_by_month(Event *list, char *month){
         strncpy(substr, move->time+5, 2);
         substr[2] = '\0';
         if (strcmp(substr, month) == 0){
-            printf("Event name: %s\nEvent time: %s\nEvent place: %s\nEvent description: %s\n", move->name, move->time, move->place, move->description);
+            printf("Event name: %s\nEvent time: %s\nEvent location: %s\nEvent description: %s\n", move->name, move->time, move->location, move->description);
             printf("\n");
         }
     }
@@ -158,7 +191,7 @@ void print_list_by_day(Event *list, char *day){
         strncpy(substr, move->time+8, 2);
         substr[2] = '\0';
         if (strcmp(substr, day) == 0){
-            printf("Event name: %s\nEvent time: %s\nEvent place: %s\nEvent description: %s\n", move->name, move->time, move->place, move->description);
+            printf("Event name: %s\nEvent time: %s\nEvent location: %s\nEvent description: %s\n", move->name, move->time, move->location, move->description);
             printf("\n");
         }
     }
@@ -170,7 +203,7 @@ void write_to_file(char* filename, Event *list){
         perror("The file cannot be opened!\n");
     else{
         for (Event *move = list; move != NULL; move = move->next)
-            fprintf(fp, "%s|%s|%s|%s\n", move->name, move->time, move->place, move->description);
+            fprintf(fp, "%s|%s|%s|%s\n", move->name, move->time, move->location, move->description);
     }
     fclose(fp);
 }
@@ -181,6 +214,8 @@ int main(void) {
     events = add_event(events, "Csuklo kontroll", "2024.04.10. 17:15", "Budapest, 1095, Mester utca 45-49.", "Ferencvarosi szakrendelo");
     events = delete_event_by_name(events, "KEG Kocsmakviz");
     print_events(events);
+    modify_event_by_name(events, "Csuklo kontroll", "Csuklo kontrol");
+    print_events(events);
     print_list_by_year(events, "2024");
     print_list_by_month(events, "04");
     print_list_by_day(events, "02");
@@ -188,7 +223,7 @@ int main(void) {
     if (event == NULL)
         printf("The element does not exist!\n");
     else
-        printf("Event name: %s\nEvent time: %s\nEvent place: %s\nEvent description: %s\n", event->name, event->time, event->place, event->description);
+        printf("Event name: %s\nEvent time: %s\nEvent location: %s\nEvent description: %s\n", event->name, event->time, event->location, event->description);
     write_to_file("esemenyek.txt", events);
     return 0;
 }
