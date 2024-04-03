@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 
 #define LINE_LENGTH 100
 
@@ -262,7 +261,7 @@ int main(void) {
     print_list_by_year(events, "2024");
     print_list_by_month(events, "04");
     print_list_by_day(events, "02");
-    /*
+    */
 
     // Search function testing section
     /*
