@@ -8,7 +8,6 @@
 // Menu
 // Refactor
 // Split into files
-// esemenyek.txt atnevezese
 
 typedef struct Event{
     char *name;
@@ -234,7 +233,7 @@ int main(void) {
     Event *events = NULL;
 
     // Create linked list from file
-    events = create_list("esemenyek.txt", events);
+    events = create_list("events.txt", events);
     print_events(events);
 
     // Add new element to linked list
@@ -287,7 +286,7 @@ int main(void) {
 
     // Write into file
     /*
-    write_to_file("esemenyek.txt", events);
+    write_to_file("events.txt", events);
     */
 
     // Release the linked list
