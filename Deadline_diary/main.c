@@ -98,12 +98,42 @@ Event *search_by_name(Event *list, char *name){
     return NULL;
 }
 
+void print_list_by_year(Event *list, char *year){
+    printf("Event(s) of year %s in ascending order:\n", year);
+    printf("-----------------------------------------\n");
+    for (Event *move = list; move != NULL; move = move->next){
+        char *substr = (char*) malloc(sizeof(char) * 2);
+        strncpy(substr, move->time, 4);
+        substr[4] = '\0';
+        if (strcmp(substr, year) == 0){
+            printf("Event name: %s\nEvent time: %s\nEvent place: %s\nEvent description: %s\n", move->name, move->time, move->place, move->description);
+            printf("\n");
+        }
+    }
+}
+
 void print_list_by_month(Event *list, char *month){
+    printf("Event(s) of month %s in ascending order:\n", month);
+    printf("----------------------------------------\n");
     for (Event *move = list; move != NULL; move = move->next){
         char *substr = (char*) malloc(sizeof(char) * 2);
         strncpy(substr, move->time+5, 2);
         substr[2] = '\0';
         if (strcmp(substr, month) == 0){
+            printf("Event name: %s\nEvent time: %s\nEvent place: %s\nEvent description: %s\n", move->name, move->time, move->place, move->description);
+            printf("\n");
+        }
+    }
+}
+
+void print_list_by_day(Event *list, char *day){
+    printf("Event(s) of day %s in ascending order:\n", day);
+    printf("--------------------------------------\n");
+    for (Event *move = list; move != NULL; move = move->next){
+        char *substr = (char*) malloc(sizeof(char) * 2);
+        strncpy(substr, move->time+8, 2);
+        substr[2] = '\0';
+        if (strcmp(substr, day) == 0){
             printf("Event name: %s\nEvent time: %s\nEvent place: %s\nEvent description: %s\n", move->name, move->time, move->place, move->description);
             printf("\n");
         }
@@ -126,7 +156,9 @@ int main(void) {
     events = create_list("esemenyek.txt", events);
     events = add_event(events, "Csuklo kontroll", "2024.04.10. 17:15", "Budapest, 1095, Mester utca 45-49.", "Ferencvarosi szakrendelo");
     print_events(events);
+    print_list_by_year(events, "2024");
     print_list_by_month(events, "04");
+    print_list_by_day(events, "02");
     Event *event = search_by_name(events, "KEG Kocsmakviz");
     if (event == NULL)
         printf("The element does not exist!\n");
