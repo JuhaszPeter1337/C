@@ -9,7 +9,6 @@
 // Menu
 // Refactor
 // Split into files
-// free lancolt lista
 // esemenyek.txt atnevezese
 
 typedef struct Event{
@@ -232,9 +231,18 @@ void freeList(Event *list){
 }
 
 int main(void) {
+    // Define Event object
     Event *events = NULL;
+
+    // Create linked list from file
     events = create_list("esemenyek.txt", events);
+    print_events(events);
+
+    // Add new element to linked list
+    /*
     //events = add_event(events, "Csuklo kontroll", "2024.04.10. 17:15", "Budapest, 1095, Mester utca 45-49.", "Ferencvarosi szakrendelo");
+    print_events(events);
+    */
 
     // Delete event
     /*
@@ -249,9 +257,12 @@ int main(void) {
     print_events(events);
     */
 
-    //print_list_by_year(events, "2024");
-    //print_list_by_month(events, "04");
-    //print_list_by_day(events, "02");
+    // Print list by attribute
+    /*
+    print_list_by_year(events, "2024");
+    print_list_by_month(events, "04");
+    print_list_by_day(events, "02");
+    /*
 
     // Search function testing section
     /*
@@ -275,7 +286,10 @@ int main(void) {
         print_events(search_event);
     */
 
-    //write_to_file("esemenyek.txt", events);
+    // Write into file
+    /*
+    write_to_file("esemenyek.txt", events);
+    */
 
     // Release the linked list
     freeList(events);
