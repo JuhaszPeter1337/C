@@ -83,19 +83,43 @@ Event *add_event(Event *list, char *name, char *time, char *place, char *descrip
     return new_event;
 }
 
-void print_events(Event *list){
-    for (Event *move = list; move != NULL; move = move->next){
-        printf("Event name: %s\nEvent time: %s\nEvent place: %s\nEvent description: %s\n", move->name, move->time, move->place, move->description);
-        printf("\n");
-    }
-}
-
 Event *search_by_name(Event *list, char *name){
     for (Event *move = list; move != NULL; move = move->next){
         if (strcmp(move->name, name) == 0)
             return move;
     }
     return NULL;
+}
+
+Event *delete_event_by_name(Event *list, char *name){
+    Event *move = list;
+    Event *move_behind = NULL;
+
+    if (list == NULL)
+        return NULL;
+    while (move != NULL){
+        if (strcmp(move->name, name) == 0) {
+            Event *delete_item = move;
+            move = move->next;
+            if (move_behind == NULL)
+                list = move;
+            else
+                move_behind->next = move;
+            free(delete_item);
+        }
+        else{
+            move_behind = move;
+            move = move->next;
+        }
+    }
+    return list;
+}
+
+void print_events(Event *list){
+    for (Event *move = list; move != NULL; move = move->next){
+        printf("Event name: %s\nEvent time: %s\nEvent place: %s\nEvent description: %s\n", move->name, move->time, move->place, move->description);
+        printf("\n");
+    }
 }
 
 void print_list_by_year(Event *list, char *year){
@@ -155,6 +179,7 @@ int main(void) {
     Event *events = NULL;
     events = create_list("esemenyek.txt", events);
     events = add_event(events, "Csuklo kontroll", "2024.04.10. 17:15", "Budapest, 1095, Mester utca 45-49.", "Ferencvarosi szakrendelo");
+    events = delete_event_by_name(events, "KEG Kocsmakviz");
     print_events(events);
     print_list_by_year(events, "2024");
     print_list_by_month(events, "04");
