@@ -238,7 +238,7 @@ Event *print_list_by_year(Event *list, char *year){
 }
 
 Event *print_list_by_month(Event *list, char *year, char *month){
-    printf("Event(s) of month %s-%s in ascending order:\n", year, month);
+    printf("Event(s) of month %s/%s in ascending order:\n", year, month);
     printf("---------------------------------------------\n");
     Event *new_list = NULL;
     for (Event *move = list; move != NULL; move = move->next){
@@ -280,18 +280,49 @@ Event *print_list_by_month(Event *list, char *year, char *month){
     return new_list;
 }
 
-void print_list_by_day(Event *list, char *day){
-    printf("Event(s) of day %s in ascending order:\n", day);
-    printf("--------------------------------------\n");
+Event *print_list_by_day(Event *list, char *year, char *month, char *day){
+    printf("Event(s) of day %s/%s/%s in ascending order:\n", year, month, day);
+    printf("----------------------------------------------\n");
+    Event *new_list = NULL;
     for (Event *move = list; move != NULL; move = move->next){
         char *substr = (char*) malloc(sizeof(char) * 2);
-        strncpy(substr, move->time+8, 2);
-        substr[2] = '\0';
-        if (strcmp(substr, day) == 0){
-            printf("Event name: %s\nEvent time: %s\nEvent location: %s\nEvent description: %s\n", move->name, move->time, move->location, move->description);
-            printf("\n");
+        strncpy(substr, move->time, 10);
+        substr[10] = '\0';
+        char date[15];
+        strcpy(date, year);
+        strcat(date, "/");
+        strcat(date, month);
+        strcat(date, "/");
+        strcat(date, day);
+        if (strcmp(substr, date) == 0){
+            if (new_list == NULL || smaller_or_greater(move->time, new_list->time) == -1){
+                new_list = add_event(new_list, move->name, move->time, move->location, move->description);
+            }
+            else{
+                Event *new_unit = (Event*) malloc(sizeof(Event));
+
+                new_unit->name = (char*) malloc(sizeof(char) * (strlen(move->name) + 1));
+                strcpy(new_unit->name, move->name);
+                new_unit->time = (char*) malloc(sizeof(char) * (strlen(move->time) + 1));
+                strcpy(new_unit->time, move->time);
+                new_unit->location = (char*) malloc(sizeof(char) * (strlen(move->location) + 1));
+                strcpy(new_unit->location, move->location);
+                new_unit->description = (char*) malloc(sizeof(char) * (strlen(move->description) + 1));
+                strcpy(new_unit->description, move->description);
+
+                Event *item = new_list;
+                Event *item_behind = NULL;
+
+                while (item != NULL && smaller_or_greater(move->time, item->time) == 1){
+                    item_behind = item;
+                    item = item->next;
+                }
+                new_unit->next = item;
+                item_behind->next = new_unit;
+            }
         }
     }
+    return new_list;
 }
 
 void write_to_file(char* filename, Event *list){
@@ -356,11 +387,15 @@ int main(void) {
     print_events(filtered_list);
     */
 
+    /*
     Event *filtered_list;
     filtered_list = print_list_by_month(events, "2024", "04");
     print_events(filtered_list);
+    */
 
-    //print_list_by_day(events, "02");
+    Event *filtered_list;
+    filtered_list = print_list_by_day(events, "2024", "04", "10");
+    print_events(filtered_list);
 
     // Search function testing section
     /*
