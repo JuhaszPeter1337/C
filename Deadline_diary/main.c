@@ -172,19 +172,69 @@ void print_events(Event *list){
     }
 }
 
-void print_list_by_year(Event *list, char *year){
+int smaller_or_greater(char *first, char *second){
+    struct tm temp1 = {0};
+    struct tm temp2 = {0};
+
+    temp1.tm_hour = strtol(first + 11, NULL, 10);
+    temp1.tm_min =  strtol(first + 14, NULL, 10);
+    temp1.tm_mday = strtol(first + 8, NULL, 10); // needs error checking
+    temp1.tm_mon = strtol(first + 5, NULL, 10) - 1; // needs error checking
+    temp1.tm_year = strtol(first, NULL, 10) - 1900; // needs error checking
+
+    temp2.tm_hour = strtol(second + 11, NULL, 10);
+    temp2.tm_min =  strtol(second + 14, NULL, 10);
+    temp2.tm_mday = strtol(second + 8, NULL, 10); // needs error checking
+    temp2.tm_mon = strtol(second + 5, NULL, 10) - 1; // needs error checking
+    temp2.tm_year = strtol(second, NULL, 10) - 1900; // needs error checking
+
+    time_t unix_seconds1 = mktime(&temp1);
+    time_t unix_seconds2 = mktime(&temp2);
+
+    double actual_time_between = difftime(unix_seconds1, unix_seconds2);
+    if (actual_time_between < 0)
+        return -1;
+    else
+        return 1;
+}
+
+Event *print_list_by_year(Event *list, char *year){
     printf("Event(s) of year %s in ascending order:\n", year);
     printf("-----------------------------------------\n");
+    Event *new_list = NULL;
     for (Event *move = list; move != NULL; move = move->next){
         char *substr = (char*) malloc(sizeof(char) * 2);
         strncpy(substr, move->time, 4);
         substr[4] = '\0';
         if (strcmp(substr, year) == 0){
-            //TODO ascending order
-            printf("Event name: %s\nEvent time: %s\nEvent location: %s\nEvent description: %s\n", move->name, move->time, move->location, move->description);
-            printf("\n");
+            if (new_list == NULL || smaller_or_greater(move->time, new_list->time) == -1){
+                new_list = add_event(new_list, move->name, move->time, move->location, move->description);
+            }
+            else{
+                Event *new_unit = (Event*) malloc(sizeof(Event));
+
+                new_unit->name = (char*) malloc(sizeof(char) * (strlen(move->name) + 1));
+                strcpy(new_unit->name, move->name);
+                new_unit->time = (char*) malloc(sizeof(char) * (strlen(move->time) + 1));
+                strcpy(new_unit->time, move->time);
+                new_unit->location = (char*) malloc(sizeof(char) * (strlen(move->location) + 1));
+                strcpy(new_unit->location, move->location);
+                new_unit->description = (char*) malloc(sizeof(char) * (strlen(move->description) + 1));
+                strcpy(new_unit->description, move->description);
+
+                Event *item = new_list;
+                Event *item_behind = NULL;
+
+                while (item != NULL && smaller_or_greater(move->time, item->time) == 1){
+                    item_behind = item;
+                    item = item->next;
+                }
+                new_unit->next = item;
+                item_behind->next = new_unit;
+            }
         }
     }
+    return new_list;
 }
 
 void print_list_by_month(Event *list, char *month){
@@ -235,46 +285,21 @@ void freeList(Event *list){
     } while (move != NULL);
 }
 
-int smaller_or_greater(char *first, char *second){
-    struct tm temp1 = {0};
-    struct tm temp2 = {0};
-
-    temp1.tm_hour = strtol(first + 11, NULL, 10);
-    temp1.tm_min =  strtol(first + 14, NULL, 10);
-    temp1.tm_mday = strtol(first + 8, NULL, 10); // needs error checking
-    temp1.tm_mon = strtol(first + 5, NULL, 10) - 1; // needs error checking
-    temp1.tm_year = strtol(first, NULL, 10) - 1900; // needs error checking
-
-    temp2.tm_hour = strtol(second + 11, NULL, 10);
-    temp2.tm_min =  strtol(second + 14, NULL, 10);
-    temp2.tm_mday = strtol(second + 8, NULL, 10); // needs error checking
-    temp2.tm_mon = strtol(second + 5, NULL, 10) - 1; // needs error checking
-    temp2.tm_year = strtol(second, NULL, 10) - 1900; // needs error checking
-
-    time_t unix_seconds1 = mktime(&temp1);
-    time_t unix_seconds2 = mktime(&temp2);
-
-    double actual_time_between = difftime(unix_seconds1, unix_seconds2);
-    printf("%1.0f\n", actual_time_between);
-    if (actual_time_between < 0)
-        return -1;
-    else
-        return 1;
-}
-
 int main(void) {
+    /*
     int result = smaller_or_greater("2024/04/10 17:15", "2024/04/10 17:16");
     if (result == 1)
         printf("Az elso a nagyobb!\n\n");
     else
         printf("Az elso a kisebb!\n\n");
+    */
 
     // Define Event object
     Event *events = NULL;
 
     // Create linked list from file
     events = create_list("events.txt", events);
-    print_events(events);
+    //print_events(events);
 
     // Add new element to linked list
     /*
@@ -296,11 +321,11 @@ int main(void) {
     */
 
     // Print list by attribute
-    /*
-    print_list_by_year(events, "2024");
-    print_list_by_month(events, "04");
-    print_list_by_day(events, "02");
-    */
+    Event *filtered_list;
+    filtered_list = print_list_by_year(events, "2024");
+    print_events(filtered_list);
+    //print_list_by_month(events, "04");
+    //print_list_by_day(events, "02");
 
     // Search function testing section
     /*
