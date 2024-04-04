@@ -5,7 +5,6 @@
 
 #define LINE_LENGTH 100
 
-// Ascending order
 // Menu
 // Refactor
 // Split into files
