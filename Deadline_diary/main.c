@@ -345,78 +345,67 @@ void freeList(Event *list){
 }
 
 int main(void) {
-    /*
-    int result = smaller_or_greater("2024/04/10 17:15", "2024/04/10 17:16");
-    if (result == 1)
-        printf("Az elso a nagyobb!\n\n");
-    else
-        printf("Az elso a kisebb!\n\n");
-    */
-
     // Define Event object
     Event *events = NULL;
 
     // Create linked list from file
     events = create_list("events.txt", events);
-    //print_events(events);
+    printf("All events:\n");
+    printf("-----------\n");
+    print_events(events);
 
-    // Add new element to linked list
-    /*
+    // Add existing element to linked list
+    printf("Adding element:\n");
+    printf("---------------\n");
     events = add_event(events, "Csuklo kontroll", "2024/04/10 17:15", "Budapest, 1095, Mester utca 45-49.", "Ferencvarosi szakrendelo");
-    print_events(events);
-    */
 
-    // Delete event
-    /*
-    events = delete_event(events, "KEG Kocsmakviz", "2024/04/07 19:00", "Budapest, 1114, Orlay u. 1.");
-    print_events(events);
-    */
+    // Delete not existing event (nothing happens)
+    events = delete_event(events, "KEG Kocsmakvizz", "2024/04/07 19:00", "Budapest, 1114, Orlay u. 1.");
 
     // Modify event attribute
-    /*
-    print_events(events);
     modify_event(events, "Csuklo kontroll", "2024/04/10 17:15", "Budapest, 1095, Mester utca 45-49.", "name", "Csuklo kontrol");
-    print_events(events);
-    */
 
     // Print list by attribute
-    /*
     Event *filtered_list;
     filtered_list = print_list_by_year(events, "2024");
     print_events(filtered_list);
-    */
 
-    /*
-    Event *filtered_list;
     filtered_list = print_list_by_month(events, "2024", "04");
     print_events(filtered_list);
-    */
 
-    Event *filtered_list;
     filtered_list = print_list_by_day(events, "2024", "04", "10");
     print_events(filtered_list);
 
     // Search function testing section
-    /*
     searchFunctionPtr fptr = search_by_name;
     Event *search_event = fptr(events, "KEG Kocsmakviz");
     if (search_event == NULL)
         printf("The element does not exist!\n");
-    else
+    else{
+        printf("The searched element:\n");
+        printf("---------------------\n");
         print_events(search_event);
+    }
+
     fptr = search_by_date;
     search_event = fptr(events, "2024/04/12 16:20");
     if (search_event == NULL)
         printf("The element does not exist!\n");
-    else
+    else{
+        printf("The searched element:\n");
+        printf("---------------------\n");
         print_events(search_event);
+    }
+
     fptr = search_by_location;
     search_event = fptr(events, "Budapest, 1095, Mester utca 45-49.");
     if (search_event == NULL)
         printf("The element does not exist!\n");
-    else
+    else{
+        printf("The searched element:\n");
+        printf("---------------------\n");
         print_events(search_event);
-    */
+    }
 
     // Write into file
     /*
