@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #define LINE_LENGTH 100
 
@@ -228,7 +229,40 @@ void freeList(Event *list){
     } while (move != NULL);
 }
 
+int smaller_or_greater(char *first, char *second){
+    struct tm temp1 = {0};
+    struct tm temp2 = {0};
+
+    temp1.tm_hour = strtol(first + 11, NULL, 10);
+    temp1.tm_min =  strtol(first + 14, NULL, 10);
+    temp1.tm_mday = strtol(first + 8, NULL, 10); // needs error checking
+    temp1.tm_mon = strtol(first + 5, NULL, 10) - 1; // needs error checking
+    temp1.tm_year = strtol(first, NULL, 10) - 1900; // needs error checking
+
+    temp2.tm_hour = strtol(second + 11, NULL, 10);
+    temp2.tm_min =  strtol(second + 14, NULL, 10);
+    temp2.tm_mday = strtol(second + 8, NULL, 10); // needs error checking
+    temp2.tm_mon = strtol(second + 5, NULL, 10) - 1; // needs error checking
+    temp2.tm_year = strtol(second, NULL, 10) - 1900; // needs error checking
+
+    time_t unix_seconds1 = mktime(&temp1);
+    time_t unix_seconds2 = mktime(&temp2);
+
+    double actual_time_between = difftime(unix_seconds1, unix_seconds2);
+    printf("%1.0f\n", actual_time_between);
+    if (actual_time_between < 0)
+        return -1;
+    else
+        return 1;
+}
+
 int main(void) {
+    int result = smaller_or_greater("2024/04/10 17:15", "2024/04/10 17:16");
+    if (result == 1)
+        printf("Az elso a nagyobb!\n\n");
+    else
+        printf("Az elso a kisebb!\n\n");
+
     // Define Event object
     Event *events = NULL;
 
