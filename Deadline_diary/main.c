@@ -72,6 +72,12 @@ Event *create_list(char *filename, Event *list){
 }
 
 Event *add_event(Event *list, char *name, char *time, char *location, char *description){
+    for (Event *move = list; move != NULL; move = move->next){
+        if (strcmp(move->name, name) == 0 && strcmp(move->time, time) == 0 && strcmp(move->location, location) == 0){
+            printf("The item is already in the list!\n\n");
+            return list;
+        }
+    }
     Event *new_event = (Event*) malloc(sizeof(Event));
 
     new_event->name = (char*) malloc(sizeof(char) * (strlen(name) + 1));
@@ -272,7 +278,7 @@ int main(void) {
 
     // Add new element to linked list
     /*
-    events = add_event(events, "Csuklo kontroll", "2024.04.10. 17:15", "Budapest, 1095, Mester utca 45-49.", "Ferencvarosi szakrendelo");
+    events = add_event(events, "Csuklo kontroll", "2024/04/10 17:15", "Budapest, 1095, Mester utca 45-49.", "Ferencvarosi szakrendelo");
     print_events(events);
     */
 
