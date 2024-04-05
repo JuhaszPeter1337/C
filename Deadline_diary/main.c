@@ -199,7 +199,7 @@ int smaller_or_greater(char *first, char *second){
 }
 
 Event *print_list_by_year(Event *list, char *year){
-    printf("Event(s) of year %s in ascending order:\n", year);
+    printf("\nEvent(s) of year %s in ascending order:\n", year);
     printf("-----------------------------------------\n");
     Event *new_list = NULL;
     for (Event *move = list; move != NULL; move = move->next){
@@ -238,7 +238,7 @@ Event *print_list_by_year(Event *list, char *year){
 }
 
 Event *print_list_by_month(Event *list, char *year, char *month){
-    printf("Event(s) of month %s/%s in ascending order:\n", year, month);
+    printf("\nEvent(s) of month %s/%s in ascending order:\n", year, month);
     printf("---------------------------------------------\n");
     Event *new_list = NULL;
     for (Event *move = list; move != NULL; move = move->next){
@@ -281,7 +281,7 @@ Event *print_list_by_month(Event *list, char *year, char *month){
 }
 
 Event *print_list_by_day(Event *list, char *year, char *month, char *day){
-    printf("Event(s) of day %s/%s/%s in ascending order:\n", year, month, day);
+    printf("\nEvent(s) of day %s/%s/%s in ascending order:\n", year, month, day);
     printf("----------------------------------------------\n");
     Event *new_list = NULL;
     for (Event *move = list; move != NULL; move = move->next){
@@ -349,7 +349,23 @@ void freeList(Event *list){
 void options(){
     printf("Choose from these options and write one number!\n\n");
     char *options_array[] = {"Print all events", "Add element to linked list", "Delete element from linked list",
-                            "Modify event attribute", "Print list by attribute", "Write into file", "Exit"};
+                            "Modify event attribute", "Print list by attribute", "Search by attribute", "Write into file", "Exit"};
+    int array_length = sizeof(options_array) / sizeof(options_array[0]);
+    for (int i = 0; i < array_length; i++)
+        printf("%i. %s\n", i + 1, options_array[i]);
+}
+
+void options_for_searching(){
+    printf("\nChose from the searching options and write on number!\n\n");
+    char *options_array[] = {"Search by name", "Search by date", "Search by location"};
+    int array_length = sizeof(options_array) / sizeof(options_array[0]);
+    for (int i = 0; i < array_length; i++)
+        printf("%i. %s\n", i + 1, options_array[i]);
+}
+
+void options_for_filtering(){
+    printf("\nChose from the filtering options and write on number!\n\n");
+    char *options_array[] = {"Year filter", "Month filter", "Day filter"};
     int array_length = sizeof(options_array) / sizeof(options_array[0]);
     for (int i = 0; i < array_length; i++)
         printf("%i. %s\n", i + 1, options_array[i]);
@@ -357,7 +373,7 @@ void options(){
 
 int main(void) {
     bool run = true;
-    int choice;
+    int choice, filter_choice, searching_choice;
 
     // Define Event object
     Event *events = NULL;
@@ -420,24 +436,147 @@ int main(void) {
 
                 break;
             case 4:
+
                 break;
             case 5:
+                options_for_filtering();
+
+                printf("\nGive me a number from 1 to 3!\n");
+                scanf("%d", &filter_choice);
+                getchar();
+
+                Event *filtered_list;
+
+                char year[50], month[50], day[50];
+
+                switch (filter_choice){
+                    case 1:
+                        printf("\nGive me the year you are looking for!\n");
+                        fgets(year, sizeof(year), stdin);
+                        year[strlen(year) - 1] = '\0';
+
+                        filtered_list = print_list_by_year(events, year);
+                        print_events(filtered_list);
+
+                        break;
+                    case 2:
+                        printf("\nGive me the year you are looking for!\n");
+                        fgets(year, sizeof(year), stdin);
+                        year[strlen(year) - 1] = '\0';
+
+                        printf("\nGive me the month you are looking for!\n");
+                        fgets(month, sizeof(month), stdin);
+                        month[strlen(month) - 1] = '\0';
+
+                        filtered_list = print_list_by_month(events, year, month);
+                        print_events(filtered_list);
+
+                        break;
+                    case 3:
+                        printf("\nGive me the year you are looking for!\n");
+                        fgets(year, sizeof(year), stdin);
+                        year[strlen(year) - 1] = '\0';
+
+                        printf("\nGive me the month you are looking for!\n");
+                        fgets(month, sizeof(month), stdin);
+                        month[strlen(month) - 1] = '\0';
+
+                        printf("\nGive me the day you are looking for!\n");
+                        fgets(day, sizeof(day), stdin);
+                        day[strlen(day) - 1] = '\0';
+
+                        filtered_list = print_list_by_day(events, year, month, day);
+                        print_events(filtered_list);
+
+                        break;
+                }
+
                 break;
             case 6:
-                printf("\Printing the events into file:\n");
-                printf("-------------------------------\n");
-                write_to_file("events.txt", events);
+                options_for_searching();
+
+                printf("\nGive me a number from 1 to 3!\n");
+                scanf("%d", &searching_choice);
+                getchar();
+
+                searchFunctionPtr fptr;
+
+                switch (searching_choice){
+                    case 1:
+                        fptr = search_by_name;
+                        printf("\nGive me the name you are looking for!\n");
+
+                        fgets(name, sizeof(name), stdin);
+                        name[strlen(name) - 1] = '\0';
+
+                        Event *search_event = fptr(events, name);
+                        if (search_event == NULL)
+                            printf("\nThe element does not exist!\n");
+                        else{
+                            printf("\nThe searched element:\n");
+                            printf("---------------------\n");
+                            print_events(search_event);
+                        }
+
+                        break;
+                    case 2:
+                        fptr = search_by_date;
+                        printf("\nGive me the time you are looking for!\n");
+
+                        fgets(time, sizeof(time), stdin);
+                        time[strlen(time) - 1] = '\0';
+
+                        search_event = fptr(events, time);
+                        if (search_event == NULL)
+                            printf("\nThe element does not exist!\n");
+                        else{
+                            printf("\nThe searched element:\n");
+                            printf("---------------------\n");
+                            print_events(search_event);
+                        }
+
+                        break;
+                    case 3:
+                        fptr = search_by_location;
+
+                        printf("\nGive me the location you are looking for!\n");
+
+                        fgets(location, sizeof(location), stdin);
+                        location[strlen(location) - 1] = '\0';
+
+                        search_event = fptr(events, location);
+                        if (search_event == NULL)
+                            printf("\nThe element does not exist!\n");
+                        else{
+                            printf("\nThe searched element:\n");
+                            printf("---------------------\n");
+                            print_events(search_event);
+                        }
+
+                        break;
+                }
+
                 break;
             case 7:
+                printf("\Printing the events into file:\n");
+                printf("-------------------------------\n");
+
+                write_to_file("events.txt", events);
+
+                break;
+            case 8:
                 printf("\nThis application is about to exit!\n");
+
                 freeList(events);
+
                 run = false;
+
                 break;
         }
     }
 
-    /*
 
+    /*
     // Modify event attribute
     modify_event(events, "Csuklo kontroll", "2024/04/10 17:15", "Budapest, 1095, Mester utca 45-49.", "name", "Csuklo kontrol");
 
@@ -451,37 +590,6 @@ int main(void) {
 
     filtered_list = print_list_by_day(events, "2024", "04", "10");
     print_events(filtered_list);
-
-    // Search function testing section
-    searchFunctionPtr fptr = search_by_name;
-    Event *search_event = fptr(events, "KEG Kocsmakviz");
-    if (search_event == NULL)
-        printf("The element does not exist!\n");
-    else{
-        printf("The searched element:\n");
-        printf("---------------------\n");
-        print_events(search_event);
-    }
-
-    fptr = search_by_date;
-    search_event = fptr(events, "2024/04/12 16:20");
-    if (search_event == NULL)
-        printf("The element does not exist!\n");
-    else{
-        printf("The searched element:\n");
-        printf("---------------------\n");
-        print_events(search_event);
-    }
-
-    fptr = search_by_location;
-    search_event = fptr(events, "Budapest, 1095, Mester utca 45-49.");
-    if (search_event == NULL)
-        printf("The element does not exist!\n");
-    else{
-        printf("The searched element:\n");
-        printf("---------------------\n");
-        print_events(search_event);
-    }
     */
 
     return 0;
