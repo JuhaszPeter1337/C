@@ -371,9 +371,17 @@ void options_for_filtering(){
         printf("%i. %s\n", i + 1, options_array[i]);
 }
 
+void options_for_modifying(){
+    printf("Chose from the modifying options and write on number!\n\n");
+    char *options_array[] = {"Name attribute", "Time attribute", "Location attribute", "Description attribute"};
+    int array_length = sizeof(options_array) / sizeof(options_array[0]);
+    for (int i = 0; i < array_length; i++)
+        printf("%i. %s\n", i + 1, options_array[i]);
+}
+
 int main(void) {
     bool run = true;
-    int choice, filter_choice, searching_choice;
+    int choice, filter_choice, searching_choice, modifying_choice;
 
     // Define Event object
     Event *events = NULL;
@@ -436,6 +444,97 @@ int main(void) {
 
                 break;
             case 4:
+                printf("\nModifying element:\n");
+                printf("------------------\n");
+
+                options_for_modifying();
+
+                printf("\nGive me a number from 1 to 4!\n");
+                scanf("%d", &modifying_choice);
+                getchar();
+
+                char mire[50];
+
+                printf("%s, %s, %s, %s\n", name, time, location, description);
+
+                switch (modifying_choice){
+                    case 1:
+                        printf("\nGive me the current name of the event!\n");
+                        fgets(name, sizeof(name), stdin);
+                        name[strlen(name) - 1] = '\0';
+
+                        printf("\nGive me the current time of the event!\n");
+                        fgets(time, sizeof(time), stdin);
+                        time[strlen(time) - 1] = '\0';
+
+                        printf("\nGive me the current location of the event!\n");
+                        fgets(location, sizeof(location), stdin);
+                        location[strlen(location) - 1] = '\0';
+
+                        printf("\nGive me the new name of the event!\n");
+                        fgets(mire, sizeof(mire), stdin);
+                        mire[strlen(mire) - 1] = '\0';
+
+                        modify_event(events, name, time, location, "name", mire);
+                        break;
+                    case 2:
+                        printf("\nGive me the current name of the event!\n");
+                        fgets(name, sizeof(name), stdin);
+                        name[strlen(name) - 1] = '\0';
+
+                        printf("\nGive me the current time of the event!\n");
+                        fgets(time, sizeof(time), stdin);
+                        time[strlen(time) - 1] = '\0';
+
+                        printf("\nGive me the current location of the event!\n");
+                        fgets(location, sizeof(location), stdin);
+                        location[strlen(location) - 1] = '\0';
+
+                        printf("\nGive me the new time of the event!\n");
+                        fgets(mire, sizeof(mire), stdin);
+                        mire[strlen(mire) - 1] = '\0';
+
+                        modify_event(events, name, time, location, "date", mire);
+                        break;
+                    case 3:
+                        printf("\nGive me the current name of the event!\n");
+                        fgets(name, sizeof(name), stdin);
+                        name[strlen(name) - 1] = '\0';
+
+                        printf("\nGive me the current time of the event!\n");
+                        fgets(time, sizeof(time), stdin);
+                        time[strlen(time) - 1] = '\0';
+
+                        printf("\nGive me the current location of the event!\n");
+                        fgets(location, sizeof(location), stdin);
+                        location[strlen(location) - 1] = '\0';
+
+                        printf("\nGive me the new location of the event!\n");
+                        fgets(mire, sizeof(mire), stdin);
+                        mire[strlen(mire) - 1] = '\0';
+
+                        modify_event(events, name, time, location, "location", mire);
+                        break;
+                    case 4:
+                        printf("\nGive me the current name of the event!\n");
+                        fgets(name, sizeof(name), stdin);
+                        name[strlen(name) - 1] = '\0';
+
+                        printf("\nGive me the current time of the event!\n");
+                        fgets(time, sizeof(time), stdin);
+                        time[strlen(time) - 1] = '\0';
+
+                        printf("\nGive me the current location of the event!\n");
+                        fgets(location, sizeof(location), stdin);
+                        location[strlen(location) - 1] = '\0';
+
+                        printf("\nGive me the new description of the event!\n");
+                        fgets(mire, sizeof(mire), stdin);
+                        mire[strlen(mire) - 1] = '\0';
+
+                        modify_event(events, name, time, location, "description", mire);
+                        break;
+                }
 
                 break;
             case 5:
@@ -574,23 +673,6 @@ int main(void) {
                 break;
         }
     }
-
-
-    /*
-    // Modify event attribute
-    modify_event(events, "Csuklo kontroll", "2024/04/10 17:15", "Budapest, 1095, Mester utca 45-49.", "name", "Csuklo kontrol");
-
-    // Print list by attribute
-    Event *filtered_list;
-    filtered_list = print_list_by_year(events, "2024");
-    print_events(filtered_list);
-
-    filtered_list = print_list_by_month(events, "2024", "04");
-    print_events(filtered_list);
-
-    filtered_list = print_list_by_day(events, "2024", "04", "10");
-    print_events(filtered_list);
-    */
 
     return 0;
 }
