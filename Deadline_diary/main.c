@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <stdbool.h>
 
 #define LINE_LENGTH 100
 
@@ -73,7 +74,7 @@ Event *create_list(char *filename, Event *list){
 Event *add_event(Event *list, char *name, char *time, char *location, char *description){
     for (Event *move = list; move != NULL; move = move->next){
         if (strcmp(move->name, name) == 0 && strcmp(move->time, time) == 0 && strcmp(move->location, location) == 0){
-            printf("The item is already in the list!\n\n");
+            printf("\nThe item is already in the list!\n\n");
             return list;
         }
     }
@@ -333,6 +334,7 @@ void write_to_file(char* filename, Event *list){
             fprintf(fp, "%s|%s|%s|%s\n", move->name, move->time, move->location, move->description);
     }
     fclose(fp);
+    printf("Writing to the file was successful!\n\n");
 }
 
 void freeList(Event *list){
@@ -344,23 +346,97 @@ void freeList(Event *list){
     } while (move != NULL);
 }
 
+void options(){
+    printf("Choose from these options and write one number!\n\n");
+    char *options_array[] = {"Print all events", "Add element to linked list", "Delete element from linked list",
+                            "Modify event attribute", "Print list by attribute", "Write into file", "Exit"};
+    int array_length = sizeof(options_array) / sizeof(options_array[0]);
+    for (int i = 0; i < array_length; i++)
+        printf("%i. %s\n", i + 1, options_array[i]);
+}
+
 int main(void) {
+    bool run = true;
+    int choice;
+
     // Define Event object
     Event *events = NULL;
-
-    // Create linked list from file
     events = create_list("events.txt", events);
-    printf("All events:\n");
-    printf("-----------\n");
-    print_events(events);
 
-    // Add existing element to linked list
-    printf("Adding element:\n");
-    printf("---------------\n");
-    events = add_event(events, "Csuklo kontroll", "2024/04/10 17:15", "Budapest, 1095, Mester utca 45-49.", "Ferencvarosi szakrendelo");
+    while(run){
+        options();
+        printf("\nGive me a number from 1 to 7!\n");
+        scanf("%d", &choice);
+        getchar();
 
-    // Delete not existing event (nothing happens)
-    events = delete_event(events, "KEG Kocsmakvizz", "2024/04/07 19:00", "Budapest, 1114, Orlay u. 1.");
+        switch (choice) {
+            case 1:
+                printf("\nAll events:\n");
+                printf("-----------\n");
+
+                print_events(events);
+
+                break;
+            case 2:
+                printf("\nAdding element:\n");
+                printf("---------------\n");
+
+                char name[50], time[50], location[50], description[50];
+
+                printf("Give me the event name! ");
+                fgets(name, sizeof(name), stdin);
+                printf("Give me the event time! ");
+                fgets(time, sizeof(time), stdin);
+                printf("Give me the event location! ");
+                fgets(location, sizeof(location), stdin);
+                printf("Give me the event description! ");
+                fgets(description, sizeof(description), stdin);
+
+                name[strlen(name) - 1] = '\0';
+                time[strlen(time) - 1] = '\0';
+                location[strlen(location) - 1] = '\0';
+                description[strlen(description) - 1] = '\0';
+
+                events = add_event(events, name, time, location, description);
+
+                break;
+            case 3:
+                printf("\nDeleting element:\n");
+                printf("---------------\n");
+
+                printf("Give me the event name! ");
+                fgets(name, sizeof(name), stdin);
+                printf("Give me the event time! ");
+                fgets(time, sizeof(time), stdin);
+                printf("Give me the event location! ");
+                fgets(location, sizeof(location), stdin);
+
+                name[strlen(name) - 1] = '\0';
+                time[strlen(time) - 1] = '\0';
+                location[strlen(location) - 1] = '\0';
+                description[strlen(description) - 1] = '\0';
+
+                events = delete_event(events, name, time, location);
+
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                printf("\Printing the events into file:\n");
+                printf("-------------------------------\n");
+                write_to_file("events.txt", events);
+                break;
+            case 7:
+                printf("\nThis application is about to exit!\n");
+                freeList(events);
+                run = false;
+                break;
+        }
+    }
+
+    /*
 
     // Modify event attribute
     modify_event(events, "Csuklo kontroll", "2024/04/10 17:15", "Budapest, 1095, Mester utca 45-49.", "name", "Csuklo kontrol");
@@ -406,13 +482,7 @@ int main(void) {
         printf("---------------------\n");
         print_events(search_event);
     }
-
-    // Write into file
-    /*
-    write_to_file("events.txt", events);
     */
 
-    // Release the linked list
-    freeList(events);
     return 0;
 }
