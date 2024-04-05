@@ -148,21 +148,22 @@ Event *delete_event(Event *list, char *name, char *date, char *location){
     return list;
 }
 
-void modify_event(Event *list, char *name, char *date, char *location, char *mit, char *mire){
+int modify_event(Event *list, char *name, char *date, char *location, char *mit, char *mire){
+    int found = 0;
     for (Event *move = list; move != NULL; move = move->next){
         if (strcmp(move->name, name) == 0 && strcmp(move->time, date) == 0 && strcmp(move->location, location) == 0){
+            found = 1;
             if (strcmp(mit, "name") == 0)
-                move->name = mire;
+                strcpy(move->name, mire);
             else if (strcmp(mit, "date") == 0)
-                move->time = mire;
+                strcpy(move->time, mire);
             else if (strcmp(mit, "location") == 0)
-                move->location = mire;
+                strcpy(move->location, mire);
             else if (strcmp(mit, "description") == 0)
-                move->description = mire;
-            else
-                printf("The given input was incorrect!\n\n");
+                strcpy(move->description, mire);
         }
     }
+    return found;
 }
 
 void print_events(Event *list){
@@ -455,7 +456,7 @@ int main(void) {
 
                 char mire[50];
 
-                printf("%s, %s, %s, %s\n", name, time, location, description);
+                int item;
 
                 switch (modifying_choice){
                     case 1:
@@ -475,7 +476,11 @@ int main(void) {
                         fgets(mire, sizeof(mire), stdin);
                         mire[strlen(mire) - 1] = '\0';
 
-                        modify_event(events, name, time, location, "name", mire);
+                        item = modify_event(events, name, time, location, "name", mire);
+
+                        if (item == 0)
+                            printf("\nThe record does not exists!\n\n");
+
                         break;
                     case 2:
                         printf("\nGive me the current name of the event!\n");
@@ -494,7 +499,11 @@ int main(void) {
                         fgets(mire, sizeof(mire), stdin);
                         mire[strlen(mire) - 1] = '\0';
 
-                        modify_event(events, name, time, location, "date", mire);
+                        item = modify_event(events, name, time, location, "date", mire);
+
+                        if (item == 0)
+                            printf("\nThe record does not exists!\n\n");
+
                         break;
                     case 3:
                         printf("\nGive me the current name of the event!\n");
@@ -513,7 +522,11 @@ int main(void) {
                         fgets(mire, sizeof(mire), stdin);
                         mire[strlen(mire) - 1] = '\0';
 
-                        modify_event(events, name, time, location, "location", mire);
+                        item = modify_event(events, name, time, location, "location", mire);
+
+                        if (item == 0)
+                            printf("\nThe record does not exists!\n\n");
+
                         break;
                     case 4:
                         printf("\nGive me the current name of the event!\n");
@@ -532,7 +545,11 @@ int main(void) {
                         fgets(mire, sizeof(mire), stdin);
                         mire[strlen(mire) - 1] = '\0';
 
-                        modify_event(events, name, time, location, "description", mire);
+                        item = modify_event(events, name, time, location, "description", mire);
+
+                        if (item == 0)
+                            printf("\nThe record does not exists!\n\n");
+
                         break;
                 }
 
