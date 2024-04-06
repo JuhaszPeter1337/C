@@ -18,8 +18,6 @@ Event *create_list(char *filename, Event *list){
     else{
         char line[LINE_LENGTH];
         while (fgets(line, LINE_LENGTH, fp) != NULL) {
-            Event *event = (Event*) malloc(sizeof(Event));
-
             char *splitted_line = strtok(line, "|");
 
             char *values[4];
@@ -33,17 +31,7 @@ Event *create_list(char *filename, Event *list){
                 splitted_line = strtok(NULL, "|");
             }
 
-            event->name = (char*) malloc(sizeof(char) * (strlen(values[0]) + 1));
-            strcpy(event->name, values[0]);
-
-            event->time = (char*) malloc(sizeof(char) * (strlen(values[1]) + 1));
-            strcpy(event->time, values[1]);
-
-            event->location = (char*) malloc(sizeof(char) * (strlen(values[2]) + 1));
-            strcpy(event->location, values[2]);
-
-            event->description = (char*) malloc(sizeof(char) * (strlen(values[3]) + 1));
-            strcpy(event->description, values[3]);
+            Event *event = create_event(values[0], values[1], values[2], values[3]);
 
             event->next = start;
 
