@@ -22,31 +22,31 @@ Event *create_list(char *filename, Event *list){
 
             char *splitted_line = strtok(line, "|");
 
-            int length = get_line_length(splitted_line);
-            event->name = (char*) malloc(sizeof(char) * (length + 1));
-            strcpy(event->name, splitted_line);
+            char *values[4];
 
-            splitted_line = strtok(NULL, "|");
+            for (int i = 0; i < 4 && splitted_line != NULL; i++){
+                int length = get_line_length(splitted_line);
+                values[i] = (char*) malloc(sizeof(char) * (length + 1));
+                if (splitted_line[length - 1] == '\n')
+                    splitted_line[length - 1] = '\0';
+                strcpy(values[i], splitted_line);
+                splitted_line = strtok(NULL, "|");
+            }
 
-            length = get_line_length(splitted_line);
-            event->time = (char*) malloc(sizeof(char) * (length + 1));
-            strcpy(event->time, splitted_line);
+            event->name = (char*) malloc(sizeof(char) * (strlen(values[0]) + 1));
+            strcpy(event->name, values[0]);
 
-            splitted_line = strtok(NULL, "|");
+            event->time = (char*) malloc(sizeof(char) * (strlen(values[1]) + 1));
+            strcpy(event->time, values[1]);
 
-            length = get_line_length(splitted_line);
-            event->location = (char*) malloc(sizeof(char) * (length + 1));
-            strcpy(event->location, splitted_line);
+            event->location = (char*) malloc(sizeof(char) * (strlen(values[2]) + 1));
+            strcpy(event->location, values[2]);
 
-            splitted_line = strtok(NULL, "|");
-
-            length = get_line_length(splitted_line);
-            event->description = (char*) malloc(sizeof(char) * (length + 1));
-            if (splitted_line[length - 1] == '\n')
-                splitted_line[length - 1] = '\0';
-            strcpy(event->description, splitted_line);
+            event->description = (char*) malloc(sizeof(char) * (strlen(values[3]) + 1));
+            strcpy(event->description, values[3]);
 
             event->next = start;
+
             start = event;
         }
     }
