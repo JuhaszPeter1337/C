@@ -15,6 +15,8 @@ Event *add_event(Event *list, char *name, char *time, char *location, char *desc
 
 Event *delete_event(Event *list, char *name, char *date, char *location);
 
+Event *create_event(char *name, char *time, char *location, char *description);
+
 Event *search_by_name(Event *list, char *name);
 Event *search_by_date(Event *list, char *date);
 Event *search_by_location(Event *list, char *location);

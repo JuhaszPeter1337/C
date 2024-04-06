@@ -103,6 +103,21 @@ void print_events(Event *list){
     }
 }
 
+Event *create_event(char *name, char *time, char *location, char *description){
+    Event *new_unit = (Event*) malloc(sizeof(Event));
+
+    new_unit->name = (char*) malloc(sizeof(char) * (strlen(name) + 1));
+    strcpy(new_unit->name, name);
+    new_unit->time = (char*) malloc(sizeof(char) * (strlen(time) + 1));
+    strcpy(new_unit->time, time);
+    new_unit->location = (char*) malloc(sizeof(char) * (strlen(location) + 1));
+    strcpy(new_unit->location, location);
+    new_unit->description = (char*) malloc(sizeof(char) * (strlen(description) + 1));
+    strcpy(new_unit->description, description);
+
+    return new_unit;
+}
+
 Event *print_list_by_year(Event *list, char *year){
     printf("\nEvent(s) of year %s in ascending order:\n", year);
     printf("-----------------------------------------\n");
@@ -116,16 +131,7 @@ Event *print_list_by_year(Event *list, char *year){
                 new_list = add_event(new_list, move->name, move->time, move->location, move->description);
             }
             else{
-                Event *new_unit = (Event*) malloc(sizeof(Event));
-
-                new_unit->name = (char*) malloc(sizeof(char) * (strlen(move->name) + 1));
-                strcpy(new_unit->name, move->name);
-                new_unit->time = (char*) malloc(sizeof(char) * (strlen(move->time) + 1));
-                strcpy(new_unit->time, move->time);
-                new_unit->location = (char*) malloc(sizeof(char) * (strlen(move->location) + 1));
-                strcpy(new_unit->location, move->location);
-                new_unit->description = (char*) malloc(sizeof(char) * (strlen(move->description) + 1));
-                strcpy(new_unit->description, move->description);
+                Event *new_unit = create_event(move->name, move->time, move->location, move->description);
 
                 Event *item = new_list;
                 Event *item_behind = NULL;
@@ -159,16 +165,7 @@ Event *print_list_by_month(Event *list, char *year, char *month){
                 new_list = add_event(new_list, move->name, move->time, move->location, move->description);
             }
             else{
-                Event *new_unit = (Event*) malloc(sizeof(Event));
-
-                new_unit->name = (char*) malloc(sizeof(char) * (strlen(move->name) + 1));
-                strcpy(new_unit->name, move->name);
-                new_unit->time = (char*) malloc(sizeof(char) * (strlen(move->time) + 1));
-                strcpy(new_unit->time, move->time);
-                new_unit->location = (char*) malloc(sizeof(char) * (strlen(move->location) + 1));
-                strcpy(new_unit->location, move->location);
-                new_unit->description = (char*) malloc(sizeof(char) * (strlen(move->description) + 1));
-                strcpy(new_unit->description, move->description);
+                Event *new_unit = create_event(move->name, move->time, move->location, move->description);
 
                 Event *item = new_list;
                 Event *item_behind = NULL;
@@ -204,16 +201,7 @@ Event *print_list_by_day(Event *list, char *year, char *month, char *day){
                 new_list = add_event(new_list, move->name, move->time, move->location, move->description);
             }
             else{
-                Event *new_unit = (Event*) malloc(sizeof(Event));
-
-                new_unit->name = (char*) malloc(sizeof(char) * (strlen(move->name) + 1));
-                strcpy(new_unit->name, move->name);
-                new_unit->time = (char*) malloc(sizeof(char) * (strlen(move->time) + 1));
-                strcpy(new_unit->time, move->time);
-                new_unit->location = (char*) malloc(sizeof(char) * (strlen(move->location) + 1));
-                strcpy(new_unit->location, move->location);
-                new_unit->description = (char*) malloc(sizeof(char) * (strlen(move->description) + 1));
-                strcpy(new_unit->description, move->description);
+                Event *new_unit = create_event(move->name, move->time, move->location, move->description);
 
                 Event *item = new_list;
                 Event *item_behind = NULL;
