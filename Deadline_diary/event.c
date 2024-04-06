@@ -1,6 +1,21 @@
 #include <stdlib.h>
 #include "event.h"
 
+Event *create_event(char *name, char *time, char *location, char *description){
+    Event *new_unit = (Event*) malloc(sizeof(Event));
+
+    new_unit->name = (char*) malloc(sizeof(char) * (strlen(name) + 1));
+    strcpy(new_unit->name, name);
+    new_unit->time = (char*) malloc(sizeof(char) * (strlen(time) + 1));
+    strcpy(new_unit->time, time);
+    new_unit->location = (char*) malloc(sizeof(char) * (strlen(location) + 1));
+    strcpy(new_unit->location, location);
+    new_unit->description = (char*) malloc(sizeof(char) * (strlen(description) + 1));
+    strcpy(new_unit->description, description);
+
+    return new_unit;
+}
+
 Event *add_event(Event *list, char *name, char *time, char *location, char *description){
     for (Event *move = list; move != NULL; move = move->next){
         if (strcmp(move->name, name) == 0 && strcmp(move->time, time) == 0 && strcmp(move->location, location) == 0){
@@ -8,19 +23,7 @@ Event *add_event(Event *list, char *name, char *time, char *location, char *desc
             return list;
         }
     }
-    Event *new_event = (Event*) malloc(sizeof(Event));
-
-    new_event->name = (char*) malloc(sizeof(char) * (strlen(name) + 1));
-    strcpy(new_event->name, name);
-
-    new_event->time = (char*) malloc(sizeof(char) * (strlen(time) + 1));
-    strcpy(new_event->time, time);
-
-    new_event->location = (char*) malloc(sizeof(char) * (strlen(location) + 1));
-    strcpy(new_event->location, location);
-
-    new_event->description = (char*) malloc(sizeof(char) * (strlen(description) + 1));
-    strcpy(new_event->description, description);
+    Event *new_event = create_event(name, time, location, description);
 
     new_event->next = list;
 
@@ -101,21 +104,6 @@ void print_events(Event *list){
         printf("Event name: %s\nEvent time: %s\nEvent location: %s\nEvent description: %s\n", move->name, move->time, move->location, move->description);
         printf("\n");
     }
-}
-
-Event *create_event(char *name, char *time, char *location, char *description){
-    Event *new_unit = (Event*) malloc(sizeof(Event));
-
-    new_unit->name = (char*) malloc(sizeof(char) * (strlen(name) + 1));
-    strcpy(new_unit->name, name);
-    new_unit->time = (char*) malloc(sizeof(char) * (strlen(time) + 1));
-    strcpy(new_unit->time, time);
-    new_unit->location = (char*) malloc(sizeof(char) * (strlen(location) + 1));
-    strcpy(new_unit->location, location);
-    new_unit->description = (char*) malloc(sizeof(char) * (strlen(description) + 1));
-    strcpy(new_unit->description, description);
-
-    return new_unit;
 }
 
 Event *print_list_by_year(Event *list, char *year){
