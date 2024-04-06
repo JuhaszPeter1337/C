@@ -13,6 +13,8 @@ typedef Event* (*searchFunctionPtr)(Event*, char*);
 
 Event *create_event(char *name, char *time, char *location, char *description);
 
+int match(Event *item, char *name, char *time, char *location);
+
 Event *add_event(Event *list, char *name, char *time, char *location, char *description);
 
 Event *delete_event(Event *list, char *name, char *date, char *location);

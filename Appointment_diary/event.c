@@ -16,9 +16,16 @@ Event *create_event(char *name, char *time, char *location, char *description){
     return new_unit;
 }
 
+int match(Event *item, char *name, char *time, char *location){
+    if (strcmp(item->name, name) == 0 && strcmp(item->time, time) == 0 && strcmp(item->location, location) == 0)
+        return 1;
+    return 0;
+}
+
 Event *add_event(Event *list, char *name, char *time, char *location, char *description){
     for (Event *move = list; move != NULL; move = move->next){
-        if (strcmp(move->name, name) == 0 && strcmp(move->time, time) == 0 && strcmp(move->location, location) == 0){
+        int matched = match(move, name, time, location);
+        if (matched == 1){
             printf("\nThe item is already in the list!\n\n");
             return list;
         }
@@ -37,7 +44,8 @@ Event *delete_event(Event *list, char *name, char *date, char *location){
     if (list == NULL)
         return NULL;
     while (move != NULL){
-        if (strcmp(move->name, name) == 0 && strcmp(move->time, date) == 0 && strcmp(move->location, location) == 0) {
+        int matched = match(move, name, date, location);
+        if (matched == 1) {
             Event *delete_item = move;
             move = move->next;
             if (move_behind == NULL)
@@ -84,7 +92,8 @@ Event *search_by_location(Event *list, char *location){
 int modify_event(Event *list, char *name, char *date, char *location, char *mit, char *mire){
     int found = 0;
     for (Event *move = list; move != NULL; move = move->next){
-        if (strcmp(move->name, name) == 0 && strcmp(move->time, date) == 0 && strcmp(move->location, location) == 0){
+        int matched = match(move, name, date, location);
+        if (matched == 1){
             found = 1;
             if (strcmp(mit, "name") == 0)
                 strcpy(move->name, mire);
