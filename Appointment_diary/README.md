@@ -1,4 +1,5 @@
 Appointment diary:
+
 Create an appointment diary program that stores the date, exact time, place, name and a related note of events in "records". The program should be able to:
 
 - create new records,
