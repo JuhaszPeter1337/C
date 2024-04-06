@@ -5,13 +5,10 @@
 #include "file.h"
 #include "time_calculate.h"
 
-// Refactor
-
 int main(void) {
     bool run = true;
     int choice, filter_choice, searching_choice, modifying_choice;
 
-    // Define Event object
     Event *events = NULL;
     events = create_list("events.txt", events);
 
